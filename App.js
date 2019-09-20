@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput } from 'react-native';
+import { Text, View, TextInput, Button } from 'react-native';
 import { conditionalExpression } from '@babel/types';
 
 export default class HelloWorldApp extends Component {
@@ -9,6 +9,13 @@ export default class HelloWorldApp extends Component {
       enteredText: '',
       toDoList: [],
     };
+  }
+  addToList() {
+    let tempList = this.state.toDoList;
+    tempList.push(this.state.enteredText);
+    this.setState({
+      toDoList: tempList
+    });
   }
   render() {
     return (
@@ -22,14 +29,12 @@ export default class HelloWorldApp extends Component {
               style={{height:40}} 
               placeholder="Add to to-do list..." 
               onChangeText={(enteredText) => this.setState({enteredText})}
-              onSubmitEditing={() => {
-                let tempList = this.state.toDoList;
-                tempList.push(this.state.enteredText);
-                this.setState({
-                  toDoList: tempList
-                });
-              }}
+              onSubmitEditing={() => {this.addToList()}}
               value={this.state.enteredText}
+            />
+            <Button
+              title="Add"
+              onPress={() => {this.addToList()}}
             />
         </View>
       </View>
