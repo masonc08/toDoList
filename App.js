@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, TextInput, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { conditionalExpression } from '@babel/types';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class HelloWorldApp extends Component {
   constructor(props){
@@ -18,6 +18,23 @@ export default class HelloWorldApp extends Component {
       enteredText: '',
       toDoList: tempList
     });
+    this.storeData();
+  }
+  storeData = async () => { 
+    try {
+      await AsyncStorage.setItem('@list', this.state.toDoList.toString());
+    } catch(error){}
+  };
+  getData = async () => {
+    try {
+      let value = await AsyncStorage.getItem('@list')
+      let restoredList = value.split(',');
+      if(value !== null) {
+        this.setState({
+          toDoList: restoredList
+        });
+      }
+    } catch(e) {}
   }
   removeElement(item) {
     let tempList = this.state.toDoList;
@@ -28,9 +45,11 @@ export default class HelloWorldApp extends Component {
       this.setState({
         toDoList: tempList
       });
+      this.storeData();
   }
   }
   render() {
+    this.getData();
     return (
       <View style={{flex:1}}>
         <View style={{flex:1, justifyContent: 'center', backgroundColor: 'blue'}}>
