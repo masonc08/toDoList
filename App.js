@@ -19,6 +19,17 @@ export default class HelloWorldApp extends Component {
       toDoList: tempList
     });
   }
+  removeElement(item) {
+    let tempList = this.state.toDoList;
+    for(var i = 0; i < tempList.length; i++) {
+      if(tempList[i] === item) {
+        tempList.splice(i, 1);
+      }
+      this.setState({
+        toDoList: tempList
+      });
+  }
+  }
   render() {
     return (
       <View style={{flex:1}}>
@@ -40,12 +51,12 @@ export default class HelloWorldApp extends Component {
             />
             <Text style={{paddingTop:10, fontWeight:'bold'}}>Tasks:</Text>
             {this.state.toDoList.map((item, key) => (
-              <View style={{flexDirection: 'row'}}>
+              <View key={key} style={{flexDirection: 'row'}}>
                 <View style={{flex:9}}>
-                  <Text key={key}>{item}</Text>
+                  <Text>{item}</Text>
                 </View>
                 <View style={{flex:1}}>
-                  <Icon name="delete" size={30}/>
+                  <Icon name="delete" size={30} onPress={() => {this.removeElement(item)}}/>
                 </View>
               </View>
             ))}
